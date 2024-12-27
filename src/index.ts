@@ -5,6 +5,7 @@ import Server from "./structures/Server";
 import SettingsManager from "./structures/SettingsManager";
 import MQTTClient from "./structures/MQTTClient";
 import SystemController from "./structures/SystemController";
+import SinricProIntegration from "./structures/SinricProIntegration";
 
 async function main() {
 	const settingsManager = new SettingsManager();
@@ -20,6 +21,10 @@ async function main() {
 	const server = new Server();
 	server.start();
 	Container.set("server", server);
+
+	const sinricProIntegration = new SinricProIntegration();
+	sinricProIntegration.init();
+	Container.set("sinricProIntegration", sinricProIntegration);
 }
 
 main();

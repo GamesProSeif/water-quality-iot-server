@@ -2,6 +2,7 @@ import express from "express";
 import Container from "typedi";
 import SettingsManager from "./SettingsManager";
 import SystemController from "./SystemController";
+import cors from "cors";
 
 export default class Server {
 	private app: express.Application;
@@ -18,9 +19,15 @@ export default class Server {
 	private config() {
 		this.app.use(express.urlencoded({ extended: false }));
 		this.app.use(express.json());
+		this.app.use(cors());
 	}
 
 	private setRoutes() {
+		this.app.use((req, res, next) => {
+			console.log("Request on route:", req.path);
+			next();
+		})
+
 		this.app.post("/config", async (req, res) => {
 			const settingsManager = Container.get<SettingsManager>("settingsManager");
 

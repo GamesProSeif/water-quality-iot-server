@@ -1,13 +1,17 @@
 import Container from "typedi";
 import SettingsManager from "./SettingsManager";
 import MQTTClient from "./MQTTClient";
+import SinricProIntegration from "./SinricProIntegration";
 
 export default class SystemController {
 	private temp: number | null = null;
 	private buzzerTriggered = false;
 
-	public updateTemp(temp: number) {
+	public async updateTemp(temp: number) {
 		this.temp = temp;
+
+		const sinricProIntegration = Container.get<SinricProIntegration>("sinricProIntegration");
+		await sinricProIntegration.updateTemperature(temp);
 
 		const settingsManager = Container.get<SettingsManager>("settingsManager");
 		const { min, max, buzzerMode } = settingsManager.getAll();
